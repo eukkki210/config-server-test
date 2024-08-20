@@ -1,0 +1,62 @@
+server:
+  port: 10100
+  shutdown: graceful
+
+spring:
+  application:
+    name: user-service
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/mydb
+    username: myuser
+    password: mypassword
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyComponentPathImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    generate-ddl: false
+    show-sql: true
+
+#  messages:
+#    basename: i18n/messages
+#    encoding: utf-8
+#    fallback-to-system-locale: false
+#    always-use-message-format: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+  client:
+    healthcheck:
+      enabled: true
+    registry-fetch-interval-seconds: 30
+    disable-delta: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:10000/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+
+logging:
+  file:
+    name: ./logs/user-service.log
+
+#jwt:
+#  secret: ShineSoftShineSoftShineSoftShineSoftShineSoftShineSoftShineSoft
